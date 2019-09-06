@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "build": "babel ./src --out-dir ./compiled --source-maps --copy-files",
+    "start": "npm run build && node ./compiled/index.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,13 @@
   "bugs": {
     "url": "https://github.com/MaximeFrelin/framework-nodejs/issues"
   },
-  "homepage": "https://github.com/MaximeFrelin/framework-nodejs#readme"
+  "homepage": "https://github.com/MaximeFrelin/framework-nodejs#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-rc.1",
+    "@babel/core": "^7.0.0-rc.1",
+    "@babel/node": "^7.0.0-rc.1",
+    "@babel/plugin-proposal-decorators": "^7.4.4",
+    "@babel/plugin-syntax-decorators": "^7.2.0",
+    "@babel/preset-env": "^7.0.0-rc.1"
+  }
 }
