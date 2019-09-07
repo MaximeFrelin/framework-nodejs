@@ -1,4 +1,3 @@
-import Authentification from "./modules/authentification/Authentification"
 const http = require('http');
 
 // Create an instance of the http server to handle HTTP requests
@@ -8,8 +7,6 @@ let app = http.createServer((req, res) => {
 
     // Send back a response and end the connection
     res.end('Hello World!\n');
-    new Authentification();
-    new Authentification().testDecorator();
 });
 
 // Start the server on port 3000
