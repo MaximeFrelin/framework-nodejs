@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/MaximeFrelin/framework-nodejs/issues"
   },
-  "homepage": "https://github.com/MaximeFrelin/framework-nodejs#readme"
+  "homepage": "https://github.com/MaximeFrelin/framework-nodejs#readme",
+  "dependencies": {
+    "nodemon": "^1.19.2"
+  }
 }
