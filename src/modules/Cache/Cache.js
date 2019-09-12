@@ -6,6 +6,13 @@ let cacheEntries = {};
 
 class Cache {
 
+    /**
+     * Permet de récupèrer en cache une clé
+     * Si elle n'existe pas, utilise la fonction de callback avec les paramètres pour la stocker dans le cache et la retourner 
+     * @param {*} key 
+     * @param {*} callback 
+     * @param  {...any} args 
+     */
     GetOrset(key, callback, ...args) {
         if (!(key in cacheEntries))
             cacheEntries[key] = new CacheObject(key, callback(...args), Date.now());
@@ -32,13 +39,16 @@ class Cache {
     constructor() {
         //Efface du cache les clés si elles sont périmées
         setInterval(() => {
-            CheckObsoleteKey(cacheEntries)
+            CheckObsoleteKey()
         }, Config.cache.checkDelay);
     }
 
 }
 
-function CheckObsoleteKey(cacheEntries) {
+/**
+ * Vérifie les clés de cache qui sont périmées et les supprime
+ */
+function CheckObsoleteKey() {
     let keyToDelete = [];
 
     for (let key in cacheEntries) {
@@ -51,6 +61,9 @@ function CheckObsoleteKey(cacheEntries) {
     });
 }
 
+/**
+ * Récupère l'instance de cache
+ */
 export default function Instance() {
     if (!Config.cache.enable)
         throw error("Cache not enable");
@@ -59,3 +72,19 @@ export default function Instance() {
     }
     return instance;
 };
+
+/**
+ * Decorateur pour sauvegarder le résultat d'une fonction dans le cache
+ * @param {*} key - Clé qui sera sauvegarder dans le cache 
+ */
+export function SaveCache(key) {
+    return function (target, propertyKey, descriptor) {
+        const originalMethod = descriptor.value; //Sauvegarde de la fonction initial
+
+        descriptor.value = function (...args) {
+            return Instance().GetOrset(key, originalMethod, ...args);
+        };
+
+        return descriptor;
+    }
+}
