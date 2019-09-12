@@ -51,17 +51,14 @@ Query.prototype.where = function(colonne, comparateur, valeur){
 }
 
 
-// Query.prototype.values = function(v){
-
-//     this.query += " VALUES "
-
-// }
-
 
 Query.prototype.send = function(callback){
     
     console.log("sql querry sent : '"+this.query+"'");
-    this.sqlQuery(callback);
+    if(callback){
+        this.sqlQuery(callback);
+    }
+    
 
     
 }
