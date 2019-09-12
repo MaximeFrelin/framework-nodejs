@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node index.js"
   },
+  "dependencies": {
+    "mysql": "latest"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MaximeFrelin/framework-nodejs.git"
