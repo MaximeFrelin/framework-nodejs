@@ -1,17 +1,26 @@
+'use strict';
+
 var fs = require('fs');
 
-class AppController extends  {
-    render(){
-        fs.readFile("./src/views/pages/home", function (error, pgResp) {
-            if (error) {
-                resp.writeHead(404);
-                resp.write('Contents you are looking are Not Found');
-            } else {
-                resp.writeHead(200, { 'Content-Type': 'text/html' });
-                resp.write(pgResp);
+var AppController = class AppController{
+    constructor(){
+
+    };
+
+    render(page, callback) {
+        fs.readFile("./src/views/" + page + ".html", function (error, pgResp) {
+            var data = {
+                error: false,
+                content: pgResp
+            };
+
+            if(error){
+                data.error = true;
             }
 
-            resp.end();
+            callback(data);
         });
     }
 }
+
+module.exports = AppController;
