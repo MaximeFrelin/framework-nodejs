@@ -1,9 +1,7 @@
-'use strict';
-
 var fs = require('fs');
 
-var PagesController = class PagesController extends  {
-    home(){
+class AppController extends  {
+    render(){
         fs.readFile("./src/views/pages/home", function (error, pgResp) {
             if (error) {
                 resp.writeHead(404);
@@ -17,5 +15,3 @@ var PagesController = class PagesController extends  {
         });
     }
 }
-
-module.exports = PagesController;
