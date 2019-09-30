@@ -7,7 +7,105 @@ class Query {
         this.type = type;
         this.query = str;
         this.connexion = con;
+        this.lastInstruction;
         return this;
+
+    }
+
+
+    sqlQuery(callback){
+        this.connexion.query(this.query, function (err, res) {
+            if (err) 
+                callback(err,null);
+            else
+                callback(null,res);
+    
+        });
+    }
+
+
+    where(colonne, comparateur, valeur){
+        if(this.type === 'select' || this.type === 'delete' && this.lastInstruction != "where" && this.lastInstruction != "sort" ){
+            this.query += " WHERE " + colonne + " " + comparateur + " '" + valeur + "'";
+            this.lastInstruction = 'where';
+            return this;
+        }else{
+    
+            console.log('where ne peut être appelé qu\'après une instruction getRows ou .... ');
+    
+        }
+    
+    }
+
+
+    send(callback){
+    
+        console.log("sql querry sent : '"+this.query+"'");
+        if(callback){
+            this.sqlQuery(callback);
+        }
+        
+    }
+
+    sort(colonne, sens){
+
+        if(this.type === 'select' && this.lastInstruction != "sort"){
+
+            this.lastInstruction = 'sort';
+            this.query += ' ORDER BY ';
+
+            if(colonne.constructor === Array && sens.constructor === Array && colonne.length === sens.length){
+
+                for(var i = 0; i < colonne.length; i++){
+
+                    this.query += colonne[i] + ' ' + sens[i];
+
+                    if(i < colonne.length-1){
+
+                        this.query += ", ";
+
+                    }
+
+                }
+
+            }else if(colonne.constructor === String && sens.constructor === String){
+
+                this.query += colonne + ' ' + sens;
+
+            }
+
+            return this;
+
+        }else{
+
+            console.log('mauvaise utilisation du sort');
+
+        }
+    }
+
+
+    or(colonne, comparateur, valeur){
+
+        if(this.lastInstruction == "where" || this.lastInstruction == "or" || this.lastInstruction == "and"){
+
+            this.query +=  " OR "+colonne+" "+comparateur+" '"+valeur+"'";
+            this.lastInstruction = "or";
+
+            return this;
+        }
+
+    }
+
+    and(colonne, comparateur, valeur){
+
+        if(this.lastInstruction == "where" || this.lastInstruction == "or" || this.lastInstruction == "and"){
+
+            this.query +=  " AND "+colonne+" "+comparateur+" '"+valeur+"'";
+            this.lastInstruction = "and";
+
+            return this;
+
+        }
 
     }
 
@@ -21,46 +119,13 @@ class Query {
 // }
 
 
-Query.prototype.sqlQuery = function(callback){
-    this.connexion.query(this.query, function (err, res) {
-        if (err) 
-            callback(err,null);
-        else
-            callback(null,res);
-
-    });
-}
 
 
-Query.prototype.setResult = function(result){
+// Query.prototype.setResult = function(result){
 
-    this.result = result;
+//     this.result = result;
 
-}
+// }
 
-Query.prototype.where = function(colonne, comparateur, valeur){
-    if(this.type === 'select'){
-        this.query += " WHERE " + colonne + comparateur + valeur;
-        return this;
-    }else{
-
-        console.log('where ne peut être appelé qu\'après une instruction getRows ou .... ');
-
-    }
-
-}
-
-
-
-Query.prototype.send = function(callback){
-    
-    console.log("sql querry sent : '"+this.query+"'");
-    if(callback){
-        this.sqlQuery(callback);
-    }
-    
-
-    
-}
 
 module.exports = Query;

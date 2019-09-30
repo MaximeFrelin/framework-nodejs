@@ -3,7 +3,7 @@ const Comparator = {
     GTE: '>=',
     LT: '<',
     LTE: '<=',
-    EQ: '=='
+    EQ: '='
 }
 
 exports.Comparator = Comparator;
