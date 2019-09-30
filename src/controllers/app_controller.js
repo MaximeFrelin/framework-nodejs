@@ -8,7 +8,7 @@ var AppController = class AppController{
     };
 
     render(page, callback) {
-        fs.readFile("./src/views/" + page + ".html", function (error, pgResp) {
+        fs.readFile(__dirname + "/../views/" + page + ".html", function (error, pgResp) {
             var data = {
                 error: false,
                 content: pgResp
