@@ -1,3 +1,6 @@
+/*
+ * Fonction permettant de réaliser la demande de validation HTML
+ */
 function validateHtml(){
     let pathnameSplit = location.pathname.split('/');
     let controller = pathnameSplit[1];
@@ -10,8 +13,9 @@ function validateHtml(){
             document.location.reload();
         }
         else {
-            alert('Request failed.  Returned status of ' + xhr.status);
+            console.log('Request failed.  Returned status of ' + xhr.status);
         }
     };
+
     xhr.send();
 }
