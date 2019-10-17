@@ -9,5 +9,6 @@ export default {
     },
     authentification: {
         useCache: true
-    }
+    },
+    debug: false
 }
