@@ -9,5 +9,5 @@ export function login() {
     password
   };
 
-  axios.post("localhost:3000/login", data);
+  axios.post("http://localhost:3000/login", data);
 }

@@ -3,19 +3,25 @@ import Cache from "./modules/Cache/Cache";
 import fs from "fs";
 import jwt from "jsonwebtoken";
 import { endianness } from "os";
+import webpack from "webpack";
+import webpackDevMiddleware from "webpack-dev-middleware";
 
 const path = require("path");
 const http = require("http");
 const express = require("express");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const config = require("../webpack.server.config.js");
 
 const app = express();
-const config = require("../webpack.config.js");
-const DIST_DIR = __dirname;
+const compiler = webpack(config);
 
-app.use(express.static(DIST_DIR));
+app.options("*", cors());
 
+app.use(cors());
+
+app.use(express.static(__dirname + "/../public/"));
 app.use(
   session({
     cookieName: "session",
@@ -44,10 +50,10 @@ app.get("/", function(req, res) {
 });
 
 app.get("/loginPage", function(req, res) {
-  return res.sendFile(path.join(DIST_DIR, "./loginExample.html"));
+  return res.sendFile(path.join(__dirname, "../public/loginExample.html"));
 });
 
-app.get("/login", function(req, res) {
+app.post("/login", function(req, res) {
   new AuthentificationService().SignIn(req, res, "login", "pass");
 
   return res.end();

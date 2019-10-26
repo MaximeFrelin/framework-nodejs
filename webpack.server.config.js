@@ -4,7 +4,7 @@ const nodeExternals = require("webpack-node-externals");
 
 const SERVER_PATH = path.join(__dirname, "server");
 const SERVER_PATH_INDEX = path.join(SERVER_PATH, "index.js");
-const DIST_OUTPUT = path.join(__dirname, "dist");
+const DIST_OUTPUT = path.join(__dirname, "dist", "server");
 
 module.exports = {
   entry: {
@@ -12,8 +12,16 @@ module.exports = {
   },
   output: {
     path: DIST_OUTPUT,
-    publicPath: "/",
+    publicPath: "/..",
     filename: "[name].js"
+  },
+  devServer: {
+    contentBase: path.join(__dirname, "public"),
+    port: 9000,
+    host: `localhost`,
+    headers: {
+      "Access-Control-Allow-Origin": "*"
+    }
   },
   target: "node",
   node: {

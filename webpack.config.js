@@ -6,7 +6,7 @@ const HtmlWebPackPlugin = require("html-webpack-plugin");
 const VIEWS_PATH = path.join(__dirname, "public", "views");
 const PUBLIC_PATH = path.join(__dirname, "public");
 const PUBLIC_PATH_INDEX = path.join(PUBLIC_PATH, "index.js");
-const DIST_OUTPUT = path.join(__dirname, "dist");
+const DIST_OUTPUT = path.join(__dirname, "dist", "public");
 
 //Config des pages de pages
 const HWPConfig = new HtmlWebPackPlugin({
@@ -36,7 +36,7 @@ module.exports = {
   },
   output: {
     path: DIST_OUTPUT,
-    publicPath: "/",
+    publicPath: "/..",
     filename: `[name].js`
   },
   module: {
