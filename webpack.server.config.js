@@ -1,6 +1,8 @@
 const path = require("path");
 const webpack = require("webpack");
 const nodeExternals = require("webpack-node-externals");
+const CopyPlugin = require("copy-webpack-plugin");
+const WriteFilePlugin = require("write-file-webpack-plugin");
 
 const SERVER_PATH = path.join(__dirname, "server");
 const SERVER_PATH_INDEX = path.join(SERVER_PATH, "index.js");
@@ -10,10 +12,22 @@ module.exports = {
   entry: {
     server: SERVER_PATH_INDEX
   },
+  devtool: "inline-source-map",
   output: {
     path: DIST_OUTPUT,
-    publicPath: "/..",
-    filename: "[name].js"
+    publicPath: "/",
+    filename: "[name].js",
+    sourceMapFilename: "[name].js.map",
+    chunkFilename: "[name].js"
+  },
+  optimization: {
+    minimize: false,
+    splitChunks: {
+      chunks: "all"
+    }
+  },
+  node: {
+    __dirname: false
   },
   devServer: {
     contentBase: path.join(__dirname, "public"),
@@ -39,11 +53,25 @@ module.exports = {
         use: {
           loader: "babel-loader"
         }
+      },
+      {
+        test: /\.js$/,
+        use: ["source-map-loader"],
+        enforce: "pre"
       }
     ]
   },
   resolve: {
     extensions: [".js"],
     modules: ["src", "node_modules"]
-  }
+  },
+  plugins: [
+    new WriteFilePlugin(),
+    new CopyPlugin([
+      {
+        from: path.join(__dirname, "serveur/views"),
+        to: path.join(__dirname, "dist/views")
+      }
+    ])
+  ]
 };

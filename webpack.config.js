@@ -2,6 +2,7 @@ const webpack = require("webpack");
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const fs = require("fs");
 
 const VIEWS_PATH = path.join(__dirname, "public", "views");
 const PUBLIC_PATH = path.join(__dirname, "public");
@@ -15,6 +16,17 @@ const HWPConfig = new HtmlWebPackPlugin({
   chunks: "app",
   excludeChunks: ["server"]
 });
+
+var entries = {};
+// fs.readdir("./public/scripts", (err, files) => {
+//   files.forEach(file => {
+//     entries[file.split(".")[0]] = DIST_OUTPUT;
+//   });
+// });
+
+entries = createEntries("./public/scripts", entries);
+
+console.log(entries);
 
 //Mettre le nom des autres pages ici
 const articlesHtmlPlugin = ["cacheExample"];
@@ -31,12 +43,10 @@ module.exports = {
   target: "web",
   mode: "development",
   devtool: "source-map",
-  entry: {
-    app: PUBLIC_PATH_INDEX
-  },
+  entry: entries,
   output: {
     path: DIST_OUTPUT,
-    publicPath: "/..",
+    publicPath: "/",
     filename: `[name].js`
   },
   module: {
@@ -64,3 +74,16 @@ module.exports = {
   },
   plugins: [HWPConfig].concat(multiplesFiles)
 };
+
+function createEntries(dir, entries) {
+  fs.readdirSync(dir).forEach(file => {
+    let fullPath = dir + "/" + file;
+    if (fs.lstatSync(fullPath).isDirectory()) {
+      createEntries(fullPath, entries);
+    } else {
+      entries[file.split(".")[0]] = fullPath;
+    }
+  });
+
+  return entries;
+}
