@@ -1,15 +1,18 @@
-import { HashPass } from "./AuthentificationHelper";
+import { HashPassForLogin } from "./AuthentificationHelper";
 import jwt from "jsonwebtoken";
 import fs from "fs";
 
 export default class AuthentificationService {
   constructor() {}
 
-  get userId() {
-    return {
-      Login: "maxime",
-      Password: "azerty"
-    };
+  get users() {
+    return [
+      {
+        Salt: "GPhsCjUwkRxmtRv2IEx8",
+        Login: "maxime",
+        Password: "azerty"
+      }
+    ];
   }
 
   /**
@@ -38,8 +41,9 @@ export default class AuthentificationService {
       const token = jwt.sign({ sub: 1 }, secret);
       res.cookie("SESSION_ID", token);
       req.session.SESSION_ID = token;
-
-      res.redirect("/");
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -49,10 +53,15 @@ export default class AuthentificationService {
    * @param {*} password
    */
   isInternalAccount(login, password) {
-    // return (
-    //   login == this.userId.Login &&
-    //   // HashPass(password) HashPass(this.userId.Password)
-    // );
+    let userToTest = this.users.find(u => u.Login == login);
+    if (userToTest) {
+      return (
+        HashPassForLogin(password, userToTest.Salt) ==
+        HashPassForLogin(userToTest.Password, userToTest.Salt)
+      );
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -96,7 +105,7 @@ export default class AuthentificationService {
 /**
  * Décorateur: Si l'utilisateur est connecté : redirige vers le controller sinon retourne 403
  */
-function IsAuthorized() {
+export function IsAuthorized() {
   return function(target, propertyKey, descriptor) {
     const originalMethod = descriptor.value; //Sauvegarde de la fonction initial
     descriptor.value = function(...args) {
@@ -104,7 +113,7 @@ function IsAuthorized() {
         return originalMethod.apply(this, args);
       }
 
-      args[1].status(403).redirect("/loginPage");
+      args[1].status(403).end();
     };
 
     return descriptor;

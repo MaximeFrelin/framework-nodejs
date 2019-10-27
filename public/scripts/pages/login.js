@@ -5,8 +5,8 @@ export function login() {
   const password = document.getElementById("password").value;
 
   const data = {
-    login,
-    password
+    Login: login,
+    Password: password
   };
 
   axios.post("http://localhost:3000/login", data);

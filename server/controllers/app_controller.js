@@ -9,8 +9,6 @@ var AppController = class AppController {
 
   render(page, callback) {
     fs.readFile(this.htmlPath(page), function(error, pgResp) {
-      console.log("CONTENU");
-      console.log(pgResp);
       var data = {
         error: false,
         content: pgResp
@@ -26,8 +24,6 @@ var AppController = class AppController {
 
   get htmlPath() {
     return page => {
-      console.log(ROOT_PATH);
-      console.log(path.join(ROOT_PATH, "views", page + ".html"));
       return path.join(ROOT_PATH, "views", page + ".html");
     };
   }

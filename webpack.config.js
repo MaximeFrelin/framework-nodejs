@@ -9,35 +9,9 @@ const PUBLIC_PATH = path.join(__dirname, "public");
 const PUBLIC_PATH_INDEX = path.join(PUBLIC_PATH, "index.js");
 const DIST_OUTPUT = path.join(__dirname, "dist", "public");
 
-//Config des pages de pages
-const HWPConfig = new HtmlWebPackPlugin({
-  template: VIEWS_PATH + "/loginExample.html",
-  filename: "./loginExample.html",
-  chunks: "app",
-  excludeChunks: ["server"]
-});
-
 var entries = {};
-// fs.readdir("./public/scripts", (err, files) => {
-//   files.forEach(file => {
-//     entries[file.split(".")[0]] = DIST_OUTPUT;
-//   });
-// });
 
 entries = createEntries("./public/scripts", entries);
-
-console.log(entries);
-
-//Mettre le nom des autres pages ici
-const articlesHtmlPlugin = ["cacheExample"];
-
-//On concatène tout
-var multiplesFiles = articlesHtmlPlugin.map(entryName => {
-  return new HtmlWebPackPlugin({
-    template: VIEWS_PATH + `/${entryName}.html`,
-    filename: entryName + ".html"
-  });
-});
 
 module.exports = {
   target: "web",
@@ -47,7 +21,9 @@ module.exports = {
   output: {
     path: DIST_OUTPUT,
     publicPath: "/",
-    filename: `[name].js`
+    filename: `[name].js`,
+    libraryTarget: "var",
+    library: "[name]"
   },
   module: {
     rules: [
@@ -72,7 +48,7 @@ module.exports = {
     extensions: [".js"],
     modules: ["public", "node_modules"]
   },
-  plugins: [HWPConfig].concat(multiplesFiles)
+  plugins: []
 };
 
 function createEntries(dir, entries) {
