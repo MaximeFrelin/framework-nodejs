@@ -3,5 +3,5 @@
     "experimentalDecorators": true,
     "target": "es5"
   },
-  "include": ["serve/**/*", "public/login.js"]
+  "include": ["serve/**/*", "public/**/*", "server/**/*", "dist/**/*"]
 }

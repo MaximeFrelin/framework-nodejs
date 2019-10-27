@@ -1,16 +1,12 @@
-"use strict";
-
-var http = require("http");
-var url = require("url");
-var fs = require("fs");
-var open = require("open");
-require("babel-polyfill");
+import config from "./config/configuration";
+import url from "url";
+import open from "open";
+import fs from "fs";
 
 var controllers = require("./controllers").controllers;
-var config = require("./config/configuration");
 var Html5Validator = require("./modules/html5-validator/Html5Validator");
 
-var server = http.createServer(function(req, res) {
+export function checkController(res, req) {
   var pathname = url.parse(req.url).pathname;
   var urlInfos = explodeControllerAndAction(pathname);
   var controllerName = urlInfos[0] + "_controller";
@@ -24,7 +20,6 @@ var server = http.createServer(function(req, res) {
 
     fs.readFile(urlViews + parameters.action + ".html", function(err, data) {
       Html5Validator.validate(data.toString(), function(data) {
-        console.log(data);
         let messages = [];
         for (let i in data.messages) {
           messages.push(data.messages[i].message);
@@ -58,19 +53,10 @@ var server = http.createServer(function(req, res) {
         }
       });
     });
-  } else if (pathname.includes(".js")) {
-  /*
-   * Inclusion des fichiers javascript nécessaires dans le fichier html
-   */
-    fs.readFile(__dirname + pathname, function(err, data) {
-      res.writeHead(200, { "Content-Type": "text/javascript" });
-      res.write(data, "utf-8");
-      res.end();
-    });
   } else if (
-  /*
-   * Code pour retourner la page html demandée (vérification de l'existence du controller et de la page html)
-   */
+    /*
+     * Code pour retourner la page html demandée (vérification de l'existence du controller et de la page html)
+     */
     fs.existsSync(__dirname + "/controllers/" + controllerName + ".js")
   ) {
     if (typeof controllers[controllerName] != "undefined") {
@@ -78,7 +64,7 @@ var server = http.createServer(function(req, res) {
       var controller = new controllers[controllerName]();
 
       if (typeof controller[action] != "undefined") {
-        controller[action](req, function(data) {
+        controller[action](req, res, function(data) {
           res.writeHead(200, { "Content-Type": "text/html" });
           res.write(data.content);
           res.end();
@@ -100,11 +86,9 @@ var server = http.createServer(function(req, res) {
     generateNotFound(res, "Le fichier " + controllerName + ".js n'existe pas.");
     res.end();
   }
-});
+}
 
-server.listen(8888);
-
-var generateNotFound = function(res, text) {
+function generateNotFound(res, text) {
   let responseText;
 
   if (config.debug) {
@@ -116,8 +100,8 @@ var generateNotFound = function(res, text) {
 
   res.writeHead(404, { "Content-Type": "text/html" });
   res.write(responseText);
-};
+}
 
-var explodeControllerAndAction = function(pathname) {
+function explodeControllerAndAction(pathname) {
   return pathname.split("/").slice(1);
-};
+}
