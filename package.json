@@ -6,6 +6,9 @@
     "build": "babel ./server --out-dir ./dist --copy-files && webpack --mode development",
     "start": "npm run build && node ./dist/index.js"
   },
+  "dependencies": {
+    "mysql": "latest"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/MaximeFrelin/framework-nodejs.git"
