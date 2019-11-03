@@ -113,7 +113,13 @@ export function IsAuthorized() {
         return originalMethod.apply(this, args);
       }
 
-      args[1].status(403).end();
+      args[1].writeHead(403, {
+        "Content-Type": "text/html;  charset=utf-8"
+      });
+      args[1].write(
+        "<h1>403 Non autorisé</h1> <p>Vous ne disposez pas des autorisations nécessaires</p>"
+      );
+      args[1].end();
     };
 
     return descriptor;

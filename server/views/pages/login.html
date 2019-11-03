@@ -9,11 +9,20 @@
   </head>
   <body>
     <div>
-      <label style="margin-right: 10px;">Login</label
-      ><input id="login" type="text" />
-      <label style="margin-right: 10px;">Mot de passe</label
-      ><input id="password" type="password" />
-      <button id="login-button" onclick="login.login()">Log in</button>
+      <div id="connection-form">
+        <label style="margin-right: 10px;">Login</label
+        ><input id="login" type="text" />
+        <label style="margin-right: 10px;">Mot de passe</label
+        ><input id="password" type="password" />
+        <button id="login-button" onclick="login.login()">Log in</button>
+      </div>
+
+      <label id="connecte" style="color: green; display: none;"
+        >Connecté !</label
+      >
+      <label id="erreur" style="color: red; display: none;"
+        >Le login ou le mot de passe est faux</label
+      >
     </div>
   </body>
 </html>
