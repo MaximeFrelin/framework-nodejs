@@ -17,9 +17,10 @@
         <button id="login-button" onclick="login.login()">Log in</button>
       </div>
 
-      <label id="connecte" style="color: green; display: none;"
-        >Connecté !</label
-      >
+      <div style="display: none;" id="connected-section">
+        <label id="connecte" style="color: green;">Connecté !</label>
+        <button onclick="login.logOut()">Se déconnecter</button>
+      </div>
       <label id="erreur" style="color: red; display: none;"
         >Le login ou le mot de passe est faux</label
       >

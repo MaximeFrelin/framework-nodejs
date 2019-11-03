@@ -3,12 +3,12 @@ import axios from "axios";
 import "../../styles/pages/login.css";
 
 window.onload = function() {
-  const connecteLabel = document.getElementById("connecte");
+  const connectedSection = document.getElementById("connected-section");
   const connectionForm = document.getElementById("connection-form");
 
   var cookie = getCookie("SESSION_ID");
   if (cookie) {
-    connecteLabel.style.display = "inline";
+    connectedSection.style.display = "inline";
     connectionForm.style.display = "none";
   }
 };
@@ -16,7 +16,7 @@ window.onload = function() {
 export function login() {
   const login = document.getElementById("login").value;
   const password = document.getElementById("password").value;
-  const connecteLabel = document.getElementById("connecte");
+  const connectedSection = document.getElementById("connected-section");
   const erreurLabel = document.getElementById("erreur");
   const connectionForm = document.getElementById("connection-form");
 
@@ -28,12 +28,25 @@ export function login() {
   axios.post("http://localhost:3000/login", data).then(response => {
     if (response.data.status) {
       connectionForm.style.display = "none";
-      connecteLabel.style.display = "inline";
+      connectedSection.style.display = "inline";
       erreurLabel.style.display = "none";
     } else {
-      connecteLabel.style.display = "none";
+      connectedSection.style.display = "none";
       erreurLabel.style.display = "inline";
     }
+  });
+}
+
+export function logOut() {
+  const connectedSection = document.getElementById("connected-section");
+  const erreurLabel = document.getElementById("erreur");
+  const connectionForm = document.getElementById("connection-form");
+  axios.get("http://localhost:3000/logout", {}).then(response => {
+    connectedSection.style.display = "none";
+    connectionForm.style.display = "inline";
+    erreurLabel.style.display = "none";
+    document.getElementById("login").value = "";
+    document.getElementById("password").value = "";
   });
 }
 

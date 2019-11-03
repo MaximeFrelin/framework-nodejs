@@ -72,7 +72,6 @@ export default class AuthentificationService {
   SignOut(req, res) {
     req.session.destroy();
     res.clearCookie("SESSION_ID");
-    res.redirect("/");
   }
 
   /**
