@@ -2,6 +2,7 @@
 
 var AppController = require("./app_controller.js");
 import { IsAuthorized } from "../modules/authentification/AuthentificationService";
+import { isUserWhitespacable } from "@babel/types";
 
 var PagesController = class PagesController extends AppController {
   @IsAuthorized()
@@ -16,6 +17,14 @@ var PagesController = class PagesController extends AppController {
       callback(data);
     });
   }
+
+  dao(req, res, callback) {
+    this.render("pages/dao", function(data) {
+      callback(data);
+    });
+  }
+
+  
 };
 
 module.exports = PagesController;

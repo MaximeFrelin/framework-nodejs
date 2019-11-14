@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base href="/" />
+    <meta charset="UTF-8" />
+    <title>dao</title>
+    <script src="/dao.js"></script>
+
+</head>
+
+<body>
+
+    Vous êtes sur la page dao
+    <!-- Pour accéder à une fonction, toujours faire nomDuFichierJS.Fonction -->
+    <button id="button-validate-html">
+        <table id='tableUtilisateur'>
+            <tr>
+                <td>
+                    Nom de l'utilisateur
+                </td>
+
+                <td>
+                    Prénom de l'utilisateur
+                </td>
+
+
+                <td>
+                    Age de l'utilisateur
+                </td>
+
+                <td>
+                    @mail de l'utilisateur
+                </td>
+
+                <td>
+                    Membre depuis
+                </td>
+
+            </tr>
+
+        </table>
+
+        <div id="inputsCtn">
+
+            <input type='text' id='userNameInput'>
+            <input type='text' id='userFirstNameInput'>
+            <input type='number' id='userAgeInput'>
+            <input type='mail' id='userMailInput'>
+
+
+        </div>
+        <input type='button' id='validUser' onclick='dao.insert()' value="Ajouter">
+
+    </button>
+</body>
+
+</html>

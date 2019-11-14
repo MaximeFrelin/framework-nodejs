@@ -6,6 +6,9 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { checkController } from "./control";
 import bodyParser from "body-parser";
+import { DAO } from "./modules/dao/DAO"
+import { UserTable } from "./modules/dao/UserTable";
+
 
 require("babel-core");
 require("babel-polyfill");
@@ -70,6 +73,26 @@ app.get("/logout", (req, res) => {
   new AuthentificationService().SignOut(req, res);
 
   return res.end();
+});
+
+
+app.post("/dao_insert", (req, res) => {
+  
+  let dao =  new DAO({ id : 'root', ip: '127.0.0.1', pass : '', port: '80', db : 'framework'}).connect();
+  
+  console.log(dao);
+  let table = new UserTable('user', dao);
+  table.insert([req.body.userName, req.body.userFirstName, req.body.userAge, req.body.userMail], ["user_name", "user_firstname", "user_age", "user_mail"]);
+  res.end();
+
+});
+
+app.get("/dao_select", (req, res) =>{
+
+});
+
+app.get("/dao_sorted_select", (req, res) => {
+
 });
 
 // Start the server on port 3000
