@@ -6,6 +6,8 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { checkController } from "./control";
 import bodyParser from "body-parser";
+import { renderTemplate } from "./modules/templating/templating"
+import fs from "fs";
 import { DAO } from "./modules/dao/DAO"
 import { UserTable } from "./modules/dao/UserTable";
 
@@ -73,6 +75,13 @@ app.get("/logout", (req, res) => {
   new AuthentificationService().SignOut(req, res);
 
   return res.end();
+});
+app.post("/template", (req, res)=>{
+  let args = { "name" : req.body.name, "forname" : req.body.forname, "age" : req.body.age, "profession" : req.body.profession };
+  let content = renderTemplate(fs.readFileSync(__dirname + "/views/pages/templateResult.html", "utf8"), args);
+  res.writeHeader(200, { "Content-Type" : "text/html"});
+  res.write(content);
+  res.end();
 });
 
 

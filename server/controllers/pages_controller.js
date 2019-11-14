@@ -25,6 +25,12 @@ var PagesController = class PagesController extends AppController {
   }
 
   
+
+  template(req, res, callback) {
+    this.render("pages/template", function(data) {
+      callback(data);
+    });
+  }
 };
 
 module.exports = PagesController;

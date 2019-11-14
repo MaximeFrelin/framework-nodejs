@@ -1,4 +1,4 @@
-export function render(page, args) {
+export function renderTemplate(page, args) {
   let code = page.match(/[{]{2}[\w\s]*[}]{2}/g); // cherche {{ mot }}
   code.forEach(element => {
     //    ar.push(element.substring(2,element.length-2).trim());
